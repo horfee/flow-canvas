@@ -297,6 +297,9 @@ export class FlowCanvas extends LitElement {
           if ( this.draggingId === e.detail.node.id ) {
             this.selectedElement = e.detail.node.id;
           }
+          e.preventDefault();
+          e.stopPropagation();
+          this.requestUpdate("selectedElement");
           
         });
 
@@ -306,6 +309,7 @@ export class FlowCanvas extends LitElement {
           this.eX = e.detail.x;
           this.eY = e.detail.y;
           this.draggingId = this.draggingNode!.id;
+          this.selectedElement = this.draggingId;
           this.requestUpdate("draggingId");
           
         });
@@ -425,7 +429,14 @@ export class FlowCanvas extends LitElement {
   
 
   private _selectElement(event: MouseEvent) {
-    this.selectedElement = (event.target! as any).id;
+    let elt = (event.target! as any);
+    if ( !(elt instanceof SVGPathElement)) {
+      elt = ([...this.querySelectorAll("flow-element")] as FlowElement[]).filter( (element) => element.left <= event.offsetX && element.left + element.width >= event.offsetX && element.top <= event.offsetY && element.top + element.height >= event.offsetY)[0];
+    }
+
+    // elt = document.elementsFromPoint(event.offsetX, event.offsetY);
+    // while (elt.id === "" && elt instanceof SVGGElement ) elt = elt.parentNode;
+    this.selectedElement = elt?.id || null;
     this.requestUpdate("selectedElement");
     event.preventDefault();
   }
@@ -480,7 +491,8 @@ export class FlowCanvas extends LitElement {
             stroke-width="3" 
             fill="transparent"
             @click=${this._selectElement} 
-            d="M ${start.x} ${start.y} C ${start.x + 50} ${start.y}, ${end.x - 50} ${end.y} ${end.x} ${end.y} "></path>
+            d="M ${start.x} ${start.y} C ${start.x + 50} ${start.y}, ${end.x - 60} ${end.y} ${end.x-10} ${end.y} "
+            marker-end="url(#arrow)" ></path>
     `;
   }
 
@@ -497,6 +509,18 @@ export class FlowCanvas extends LitElement {
           </div>
         </div>
         <svg tabIndex="0" width="${this.width}" height="${this.height}" style="cursor: crosshair; touch-action: none;" @keyup=${this._onKeyPress} @mousemove=${this._onMouseMove} @mouseup=${this._onMouseUp} @click=${this._selectElement} >
+          <defs>
+            <marker
+              id="arrow"
+              viewBox="0 0 10 10"
+              refX="5"
+              refY="5"
+              markerWidth="12"
+              markerHeight="6"
+              orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" />
+            </marker>
+          </defs>
           <g>
             <g transform="scale(${this.scale})">
 
