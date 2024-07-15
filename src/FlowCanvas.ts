@@ -106,7 +106,7 @@ export class FlowElement extends LitElement {
     const lines = this.label.split("\n");
     return svg`
     <g class="node" id="${this.id}" transform="translate(${this.left || 0},${this.top || 0})" @mousedown=${this._onMouseDownOnNode.bind(this)} @mouseup=${this._onMouseUp.bind(this)} >
-      <rect class="node-rect " rx="5" ry="5" fill="#c0edc0" width="${this.width}" height="${this.height}"></rect>
+      <rect class="node-rect " rx="5" ry="5" width="${this.width}" height="${this.height}"></rect>
       <g class="node-icon" x="0" y="0" c="${mustAlignIconLeft}" transform="translate(${mustAlignIconLeft ? 0 : this.width - 30},0)" style="pointer-events: none;">
         <image xlink:href="${this.icon}" class="node-icon" x="0" width="30" height="${this.height}" y="0" style=""></image>
         <path d="M ${mustAlignIconLeft ? 29.5 : 0.5 } 1 l 0 ${this.height - 2}" class="node-icon-shade-border"></path>
@@ -186,8 +186,11 @@ export class FlowCanvas extends LitElement {
       display: block;
       --background-color: white;
       --grid-color: lightgray;
-      --node-border: red;
+      --node-border: darkgray;
       --primary-font-size: 14px;
+      --highlighted-color: red;
+      --fill-color: #c0edc0;
+      --highlighted-fill-color: #c0edc0;
       --primary-font: "Helvetica Neue", Arial, Helvetica, sans-serif;
       font-size: var(--primary-font-size);
       font-family: var(--primary-font);
@@ -217,9 +220,15 @@ export class FlowCanvas extends LitElement {
     }
 
     g.selected g.node > rect {
+      stroke: var(--highlighted-color);
       stroke-width: 3;
+      fill: var(--highlighted-fill-color);
     }
 
+    g.node > rect {
+      fill: var(--fill-color);
+    }
+    
     g.node {
       stroke: var(--node-border);
       cursor: move;
@@ -487,7 +496,7 @@ export class FlowCanvas extends LitElement {
 
     return svg`
       <path id="${connectorId}" 
-            stroke="${this.selectedElement === connectorId ? "red" : color || "black"}" 
+            stroke="${this.selectedElement === connectorId ? "var(--highlighted-color)" : color || "black"}" 
             stroke-width="3" 
             fill="transparent"
             @click=${this._selectElement} 
