@@ -1,179 +1,9 @@
-import { html, css, LitElement, svg, PropertyValueMap } from 'lit';
+import { html, css, LitElement, svg, PropertyValueMap, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { map } from 'lit/directives/map.js';
 import { range } from 'lit/directives/range.js';
-
-@customElement("flow-element")
-export class FlowElement extends LitElement {
-
-  @property({type: Number, reflect: true})
-  left = 0;
-
-  @property({type: Number, reflect: true})
-  top = 0;
-
-  @property({type: Number, reflect: true})
-  width= 120;
-
-  @property({type: Number, reflect: true})
-  height= 30;
-
-  @property({type: String, reflect: true})
-  label: string = "";
-
-  @property({type: String, reflect: true})
-  color = 0;
-
-  @property({type: String, reflect: true})
-  icon: string | undefined = undefined;
-
-  @property({type: Number, reflect: true})
-  nbSlots = 2;
-
-  @property({type: String, reflect: true, attribute: "icon-anchor"})
-  iconAnchor: "left"|"right" = "left";
-
-  protected updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
-    const minHeight = 30;
-    if ( _changedProperties.has("nbSlots") && _changedProperties.get("nbSlots") !== this.nbSlots ) {
-      const lines = this.label.split("\n");
-      const maxLengthLine = Math.max(...lines.map( (l) => l.length));
-      this.height = Math.max(minHeight, lines.length * 24, this.nbSlots * 10 + (2*5));
-    } 
-    if ( _changedProperties.has("label") && _changedProperties.get("label") !== this.label ) {
-      const minWidth = 100;
-      const sizePerCharacter = 7.2;
-      const iconWidth = 30;
-      const iconMargin = 5;
-      const slotSize = 10;
-      const lines = this.label.split("\n");
-      const maxLengthLine = Math.max(...lines.map( (l) => l.length));
-      this.width = Math.max(minWidth, maxLengthLine * sizePerCharacter + iconWidth + iconMargin * 2 + slotSize);
-      this.height = Math.max(minHeight, lines.length * 24, this.nbSlots * 10 + (2*5));
-    }
-  }
-
-  private _onMouseDownOnNode(e: MouseEvent) {
-    this.dispatchEvent(new CustomEvent("mouse-down", { bubbles: true, detail: {
-      x: e.clientX,
-      y: e.clientY,
-      node: this
-    }}));
-
-  }
-
-  private _onMouseUp(e: MouseEvent) {
-    this.dispatchEvent(new CustomEvent("mouse-up", { bubbles: true, detail: {
-      x: e.clientX,
-      y: e.clientY,
-      node: this
-    }}));
-
-  }
-
-  private _onMouseDownOnPort(slotNumber: number, e: MouseEvent) {
-    e.preventDefault();
-    e.stopPropagation();
-    if ( this.isInputSlot(slotNumber )) {
-      return;
-    }
-    this.dispatchEvent(new CustomEvent("port-mouse-down", { bubbles: true, detail: {
-      x: e.clientX,
-      y: e.clientY,
-      node: this,
-      slot: slotNumber
-    }}));
-  }
-
-  private _onMouseUpOnPort(slotNumber: number, e: MouseEvent) {
-    e.preventDefault();
-    e.stopPropagation();
-    if ( !this.isInputSlot(slotNumber )) {
-      return;
-    }
-    this.dispatchEvent(new CustomEvent("port-mouse-up", { bubbles: true, detail: {
-      x: e.clientX,
-      y: e.clientY,
-      node: this,
-      slot: slotNumber
-    }}));
-  }
-
-
-
-  render() {
-    const mustAlignIconLeft = this.iconAnchor === "left";
-    const lines = this.label.split("\n");
-    return svg`
-    <g class="node" id="${this.id}" transform="translate(${this.left || 0},${this.top || 0})" @mousedown=${this._onMouseDownOnNode.bind(this)} @mouseup=${this._onMouseUp.bind(this)} >
-      <rect class="node-rect " rx="5" ry="5" width="${this.width}" height="${this.height}"></rect>
-      <g class="node-icon" x="0" y="0" c="${mustAlignIconLeft}" transform="translate(${mustAlignIconLeft ? 0 : this.width - 30},0)" style="pointer-events: none;">
-        <image xlink:href="${this.icon}" class="node-icon" x="0" width="30" height="${this.height}" y="0" style=""></image>
-        <path d="M ${mustAlignIconLeft ? 29.5 : 0.5 } 1 l 0 ${this.height - 2}" class="node-icon-shade-border"></path>
-      </g>
-      <g class="node-label" transform="translate(${ mustAlignIconLeft ? 38 : 8 },${(this.height - (lines.length * 24)) / 2 + 15})">
-        ${lines.map( (label, index) => svg`
-          <text class="node-label-text" x="0" y="${index * 24}">${label}</text>
-        `)}
-        
-      </g>
-      ${map(range(this.nbSlots), (i) => {
-        const pos = this.getPositionForSlot(i);
-      
-        return svg`
-        <g class="port" transform="translate(${pos.x - 5},${pos.y -5})" @mousedown=${this._onMouseDownOnPort.bind(this, i)} @mouseup=${this._onMouseUpOnPort.bind(this, i)} >
-          <rect rx="3" ry="3" width="10" height="10" class="flow-port"></rect>
-        </g>
-        `
-      })}
-    </g>
-    `;
-  }
-
-  isInputSlot(input: number) {
-    return input == 0;
-  }
-
-  getPositionForSlot(input: number) {
-    if ( this.isInputSlot(input) ) {
-      return {x: 0, y: this.height / 2};
-    } else {
-      return {x: this.width, y: input * this.height / (this.nbSlots)}
-    }
-  }
-
-  getGlobalPosition(input: number) {
-    const res = this.getPositionForSlot(input);
-    res.x += this.left;
-    res.y += this.top;
-    return res;
-  }
-
-  // getPositionForOutput(input: number) {
-  //   return {x: this.left + this.width, y: this.top + (input +1) * this.height / (this.nbSlots)};
-  // }
-  
-}
-
-@customElement("flow-connector")
-export class FlowConnector extends LitElement {
-
-  @property({type: String, reflect: true})
-  color = "";
-
-  @property({type: String, reflect: true})
-  predecessor = "";
-
-  @property({type: Number, reflect: true})
-  predecessorSlot = 0;
-
-  @property({type: String, reflect: true})
-  successor = "";
-
-  @property({type: Number, reflect: true})
-  successorSlot = 0;
-
-}
+import { FlowElement, FlowConnector } from './FlowElements.js';
+import './FlowElements.js';
 
 @customElement("flow-canvas")
 export class FlowCanvas extends LitElement {
@@ -219,15 +49,15 @@ export class FlowCanvas extends LitElement {
       stroke: var(--grid-color);
     }
 
-    g.selected g.node > rect {
+    g.selected g.node > rect,
+    g.selected g.node > polygon,
+    g.selected g.node > circle,
+    g.selected g.node > polyline {
       stroke: var(--highlighted-color);
       stroke-width: 3;
-      fill: var(--highlighted-fill-color);
     }
 
-    g.node > rect {
-      fill: var(--fill-color);
-    }
+
     
     g.node {
       stroke: var(--node-border);
@@ -354,6 +184,9 @@ export class FlowCanvas extends LitElement {
           cnx.predecessorSlot = this.creatingConnectorSourceSlot;
           cnx.successorSlot = e.detail.slot;
           this.appendChild(cnx);
+          
+          this.getNode(cnx.predecessor)?.dispatchEvent(new CustomEvent("connector-created", {detail: cnx}));
+          this.getNode(cnx.successor)?.dispatchEvent(new CustomEvent("connector-created", {detail: cnx}));
           //this.creatingConnectorSourceSlot = e.detail.slot;
           console.log("Start creating output connector for slot 0");
         });
@@ -426,21 +259,43 @@ export class FlowCanvas extends LitElement {
     }
   }
 
+  private getNode(id: string): FlowElement|undefined {
+    return this.nodes.find( (node) => node.id === id);
+    
+  }
+
   private resolveInputPosition(connector: FlowConnector) {
-    const node = this.nodes.find( (node) => node.id === connector.successor);
-    return node!.getGlobalPosition(0);//.getPositionForInput(0);
+    const node = this.getNode(connector.successor);
+    //const node = this.nodes.find( (node) => node.id === connector.successor);
+    return node!.getGlobalPosition(connector.successorSlot);//.getPositionForInput(0);
   }
 
   private resolveOutputPosition(connector: FlowConnector) {
-    const node = this.nodes.find( (node) => node.id === connector.predecessor);
-    return node!.getGlobalPosition(1);//.getPositionForOutput(0);
+    //const node = this.nodes.find( (node) => node.id === connector.predecessor);
+    const node = this.getNode(connector.predecessor);
+    return node!.getGlobalPosition(connector.predecessorSlot);//.getPositionForOutput(0);
+  }
+
+  private resolveConnectorEndShouldBeVertical(connector: FlowConnector) {
+    //const node = this.nodes.find( (node) => node.id === connector.successor);
+    const node = this.getNode(connector.successor);
+    return node!.slotConnectorShouldBeVertical(connector.successorSlot);
+  }
+
+  private resolveConnectorStartShouldBeVertical(connector: FlowConnector) {
+    //const node = this.nodes.find( (node) => node.id === connector.predecessor);
+    const node = this.getNode(connector.predecessor);
+    return node!.slotConnectorShouldBeVertical(connector.predecessorSlot);
   }
   
+  private get flowElements(): Array<FlowElement> {
+    return [...this.children].filter( (elt) => elt instanceof FlowElement) as Array<FlowElement>;
+  }
 
   private _selectElement(event: MouseEvent) {
     let elt = (event.target! as any);
     if ( !(elt instanceof SVGPathElement)) {
-      elt = ([...this.querySelectorAll("flow-element")] as FlowElement[]).filter( (element) => element.left <= event.offsetX && element.left + element.width >= event.offsetX && element.top <= event.offsetY && element.top + element.height >= event.offsetY)[0];
+      elt = this.flowElements.filter( (element) => element.left <= event.offsetX && element.left + element.width >= event.offsetX && element.top <= event.offsetY && element.top + element.height >= event.offsetY)[0];
     }
 
     // elt = document.elementsFromPoint(event.offsetX, event.offsetY);
@@ -452,7 +307,7 @@ export class FlowCanvas extends LitElement {
 
 
   private _computeworkingBoundaries() {
-    const elements = [...this.querySelectorAll("flow-element")] as Array<FlowElement>;
+    const elements = this.flowElements;
     const dimensions = {left: Number.MAX_VALUE, top: Number.MAX_VALUE, right: 0, bottom: 0};
     // const final = {left: Number.MAX_VALUE, top: Number.MAX_VALUE, right: 0, bottom: 0};
     // for(const elt of elements) {
@@ -492,7 +347,8 @@ export class FlowCanvas extends LitElement {
     });
   }
 
-  renderConnector(connectorId: string, color: string, start: {x: number, y: number}, end: {x: number, y: number}) {
+  renderConnector(connectorId: string, color: string, start: {x: number, y: number}, startIsVertical: boolean, end: {x: number, y: number}, endIsVertical: boolean) {
+
 
     return svg`
       <path id="${connectorId}" 
@@ -500,7 +356,7 @@ export class FlowCanvas extends LitElement {
             stroke-width="3" 
             fill="transparent"
             @click=${this._selectElement} 
-            d="M ${start.x} ${start.y} C ${start.x + 50} ${start.y}, ${end.x - 60} ${end.y} ${end.x-10} ${end.y} "
+            d="M ${start.x} ${start.y} C ${startIsVertical ? start.x + " " + (start.y + 50): (start.x + 50) + "  " + start.y}, ${end.x - 60} ${end.y} ${end.x-10} ${end.y} "
             marker-end="url(#arrow)" ></path>
     `;
   }
@@ -524,7 +380,7 @@ export class FlowCanvas extends LitElement {
               viewBox="0 0 10 10"
               refX="5"
               refY="5"
-              markerWidth="12"
+              markerWidth="6"
               markerHeight="6"
               orient="auto-start-reverse">
               <path d="M 0 0 L 10 5 L 0 10 z" />
@@ -539,7 +395,7 @@ export class FlowCanvas extends LitElement {
                 ${map(range(1 + (this.width / this.gridSize)),(i) => svg`<line class="grid-h" x1="${i * this.gridSize}" x2="${i * this.gridSize}" y1="0" y2="${this.height}"></line>`)}
               </g>
               <g>
-                ${this.connectors.map( (connector) => this.renderConnector(connector.id, connector.color, this.resolveOutputPosition(connector), this.resolveInputPosition(connector)))}
+                ${this.connectors.map( (connector) => this.renderConnector(connector.id, connector.color, this.resolveOutputPosition(connector), this.resolveConnectorStartShouldBeVertical(connector),  this.resolveInputPosition(connector), this.resolveConnectorEndShouldBeVertical(connector)))}
               </g>
               <g>
                 ${this.nodes.filter(n => n.id !== this.draggingId && n.id !== this.selectedElement).map( (node) => node.render())}
@@ -549,7 +405,7 @@ export class FlowCanvas extends LitElement {
                 ${this.selectedElement && this.nodes.findIndex((node) => node.id === this.selectedElement) >= 0 ? this.nodes.find((node) => node.id === this.selectedElement)!.render() : ""};
               </g>
               <g>
-                ${ this.isCreatingConnector ? this.renderConnector("tmp", "red", this.creatingConnectorSource!.getGlobalPosition(this.creatingConnectorSourceSlot)/*getPositionForOutput(0)*/, this.creatingConnectorEndPoint ): ''}
+                ${ this.isCreatingConnector ? this.renderConnector("tmp", "red", this.creatingConnectorSource!.getGlobalPosition(this.creatingConnectorSourceSlot), this.creatingConnectorSource?.slotConnectorShouldBeVertical(this.creatingConnectorSourceSlot) || false, this.creatingConnectorEndPoint, true ): ''}
               </g>
             </g>
           </g>
