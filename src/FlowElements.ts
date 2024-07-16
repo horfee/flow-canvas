@@ -204,13 +204,12 @@ export class FlowConditionElement extends FlowElement {
     return svg`
     <g class="node" id="${this.id}" transform="translate(${this.left || 0},${this.top || 0})" @mousedown=${this._onMouseDownOnNode.bind(this)} @mouseup=${this._onMouseUp.bind(this)} >
       <polygon class="node-rect " fill="${FlowConditionElement.color}" points="0, ${this.height / 2} ${this.width / 2}, 0 ${this.width}, ${this.height / 2} ${this.width / 2}, ${this.height}" />
-      <g class="node-icon" x="0" y="0" transform="translate(16,-16)" style="pointer-events: none;">
+      <g class="node-icon" x="0" y="0" transform="translate(${(this.width - 30) / 2},${(this.height - 30) / 2})" style="pointer-events: none;">
         <image xlink:href="${this.icon}" class="node-icon" x="0" width="30" height="30" y="0" style=""></image>
       </g>
-      <g class="node-label" transform="translate(${ mustAlignIconLeft ? 38 : 8 },${(this.height - (lines.length * 24)) / 2 + 15})">
-        ${lines.map( (label, index) => svg`
-          <text class="node-label-text" x="0" y="${index * 24}">${label}</text>
-        `)}
+      <g class="node-label" transform="translate(${(this.width - (this.label.length * 5)) /2}, -10)">
+        <text class="node-label-text" x="0" y="0">${this.label}</text>
+        ${lines.map( (label, index) => svg``)}
         
       </g>
       <g>
@@ -233,7 +232,7 @@ export class FlowConditionElement extends FlowElement {
 
 @customElement("flow-comment-element")
 export class FlowCommentElement extends FlowElement {
-  
+
   get nbSlots(): number {
       return 0;
   }
