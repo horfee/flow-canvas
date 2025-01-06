@@ -38,7 +38,7 @@ export class FlowElement extends LitElement {
   protected updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
     const minHeight = 30;
     if ( _changedProperties.has("nbSlots") && _changedProperties.get("nbSlots") !== this.nbSlots ) {
-      const lines = this.label.split("\n");
+      const lines = (this.label||"").split("\n");
       const maxLengthLine = Math.max(...lines.map( (l) => l.length));
       this.height = Math.max(minHeight, lines.length * 24, this.nbSlots * 10 + (2*5));
     } 
@@ -48,7 +48,7 @@ export class FlowElement extends LitElement {
       const iconWidth = 30;
       const iconMargin = 5;
       const slotSize = 10;
-      const lines = this.label.split("\n");
+      const lines = (this.label||"").split("\n");
       const maxLengthLine = Math.max(...lines.map( (l) => l.length));
       this.width = Math.max(minWidth, maxLengthLine * sizePerCharacter + iconWidth + iconMargin * 2 + slotSize);
       this.height = Math.max(minHeight, lines.length * 24, this.nbSlots * 10 + (2*5));
@@ -111,7 +111,7 @@ export class FlowElement extends LitElement {
 
   render() {
     const mustAlignIconLeft = this.iconAnchor === "left";
-    const lines = this.label.split("\n");
+    const lines = (this.label||"").split("\n");
     return svg`
     <g class="node" id="${this.id}" transform="translate(${this.left || 0},${this.top || 0})" @mousedown=${this._onMouseDownOnNode.bind(this)} @mouseup=${this._onMouseUp.bind(this)} >
       <rect class="node-rect " rx="5" ry="5" fill="${(this.constructor as any).color}" width="${this.width}" height="${this.height}"></rect>
@@ -200,14 +200,14 @@ export class FlowConditionElement extends FlowElement {
 
   render(){
     const mustAlignIconLeft = this.iconAnchor === "left";
-    const lines = this.label.split("\n");
+    const lines = (this.label||"").split("\n");
     return svg`
     <g class="node" id="${this.id}" transform="translate(${this.left || 0},${this.top || 0})" @mousedown=${this._onMouseDownOnNode.bind(this)} @mouseup=${this._onMouseUp.bind(this)} >
       <polygon class="node-rect " fill="${FlowConditionElement.color}" points="0, ${this.height / 2} ${this.width / 2}, 0 ${this.width}, ${this.height / 2} ${this.width / 2}, ${this.height}" />
       <g class="node-icon" x="0" y="0" transform="translate(${(this.width - 30) / 2},${(this.height - 30) / 2})" style="pointer-events: none;">
         <image xlink:href="${this.icon}" class="node-icon" x="0" width="30" height="30" y="0" style=""></image>
       </g>
-      <g class="node-label" transform="translate(${(this.width - (this.label.length * 5)) /2}, -10)">
+      <g class="node-label" transform="translate(${(this.width - ((this.label||"").length * 5)) /2}, -10)">
         <text class="node-label-text" x="0" y="0">${this.label}</text>
         ${lines.map( (label, index) => svg``)}
         
