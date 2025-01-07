@@ -13,43 +13,405 @@
           "members": [
             {
               "kind": "field",
-              "name": "header",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Hey there'",
-              "attribute": "header"
-            },
-            {
-              "kind": "field",
-              "name": "counter",
+              "name": "width",
               "type": {
                 "text": "number"
               },
-              "default": "5",
-              "attribute": "counter"
+              "default": "8000",
+              "attribute": "width",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "height",
+              "type": {
+                "text": "number"
+              },
+              "default": "8000",
+              "attribute": "height",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "scale",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "attribute": "scale",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "gridSize",
+              "type": {
+                "text": "number"
+              },
+              "default": "20",
+              "attribute": "gridSize",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "showGrid",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "attribute": "showGrid",
+              "reflects": true
             },
             {
               "kind": "method",
-              "name": "__increment"
+              "name": "_onKeyPress",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "ev",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "nodes",
+              "type": {
+                "text": "Array<FlowElement>"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "connectors",
+              "type": {
+                "text": "Array<FlowConnector>"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "links",
+              "type": {
+                "text": "Array<FlowConnector>"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "method",
+              "name": "_handleSlotChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "isDraggingNode",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "eX",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "eY",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "draggingId",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "draggingNode",
+              "type": {
+                "text": "FlowElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "isCreatingConnector",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "creatingConnectorSource",
+              "type": {
+                "text": "FlowElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "creatingConnectorSourceSlot",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "creatingConnectorEndPoint",
+              "type": {
+                "text": "{x: number, y: number}"
+              },
+              "privacy": "private",
+              "default": "{x:0,y:0}"
+            },
+            {
+              "kind": "field",
+              "name": "selectedElement",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseUp",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseMove",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getNode",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "FlowElement|undefined"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "id",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "resolveInputPosition",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "connector",
+                  "type": {
+                    "text": "FlowConnector"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "resolveOutputPosition",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "connector",
+                  "type": {
+                    "text": "FlowConnector"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "resolveConnectorEndShouldBeVertical",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "connector",
+                  "type": {
+                    "text": "FlowConnector"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "resolveConnectorStartShouldBeVertical",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "connector",
+                  "type": {
+                    "text": "FlowConnector"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "flowElements",
+              "type": {
+                "text": "Array<FlowElement>"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_selectElement",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_computeworkingBoundaries",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_zoomOnFlow",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderConnector",
+              "parameters": [
+                {
+                  "name": "connectorId",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "color",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "start",
+                  "type": {
+                    "text": "{x: number, y: number}"
+                  }
+                },
+                {
+                  "name": "startIsVertical",
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "end",
+                  "type": {
+                    "text": "{x: number, y: number}"
+                  }
+                },
+                {
+                  "name": "endIsVertical",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
             }
           ],
           "attributes": [
             {
-              "name": "header",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Hey there'",
-              "fieldName": "header"
-            },
-            {
-              "name": "counter",
+              "name": "width",
               "type": {
                 "text": "number"
               },
-              "default": "5",
-              "fieldName": "counter"
+              "default": "8000",
+              "fieldName": "width"
+            },
+            {
+              "name": "height",
+              "type": {
+                "text": "number"
+              },
+              "default": "8000",
+              "fieldName": "height"
+            },
+            {
+              "name": "scale",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "fieldName": "scale"
+            },
+            {
+              "name": "gridSize",
+              "type": {
+                "text": "number"
+              },
+              "default": "20",
+              "fieldName": "gridSize"
+            },
+            {
+              "name": "showGrid",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "fieldName": "showGrid"
             }
           ],
           "superclass": {
@@ -68,20 +430,1755 @@
             "name": "FlowCanvas",
             "module": "src/FlowCanvas.ts"
           }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/flow-canvas.ts",
-      "declarations": [],
-      "exports": [
+        },
         {
           "kind": "custom-element-definition",
           "name": "flow-canvas",
           "declaration": {
             "name": "FlowCanvas",
-            "module": "/src/FlowCanvas.js"
+            "module": "src/FlowCanvas.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/FlowElements.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FlowElement",
+          "members": [
+            {
+              "kind": "field",
+              "name": "left",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "attribute": "left",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "top",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "attribute": "top",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "number"
+              },
+              "default": "120",
+              "attribute": "width",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "height",
+              "type": {
+                "text": "number"
+              },
+              "default": "30",
+              "attribute": "height",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "attribute": "label",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "undefined",
+              "attribute": "icon",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "nbSlots",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "iconAnchor",
+              "type": {
+                "text": "\"left\"|\"right\""
+              },
+              "default": "\"left\"",
+              "attribute": "icon-anchor",
+              "reflects": true
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseDownOnNode",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseUp",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseDownOnPort",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "slotNumber",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseUpOnPort",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "slotNumber",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "String"
+              },
+              "static": true,
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "slotConnectorShouldBeVertical",
+              "parameters": [
+                {
+                  "name": "input",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "isInputSlot",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "input",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getPositionForSlot",
+              "parameters": [
+                {
+                  "name": "input",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getGlobalPosition",
+              "parameters": [
+                {
+                  "name": "input",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            }
+          ],
+          "events": [
+            {
+              "name": "mouse-down",
+              "type": {
+                "text": "CustomEvent"
+              }
+            },
+            {
+              "name": "mouse-up",
+              "type": {
+                "text": "CustomEvent"
+              }
+            },
+            {
+              "name": "port-mouse-down",
+              "type": {
+                "text": "CustomEvent"
+              }
+            },
+            {
+              "name": "port-mouse-up",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "left",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "left"
+            },
+            {
+              "name": "top",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "top"
+            },
+            {
+              "name": "width",
+              "type": {
+                "text": "number"
+              },
+              "default": "120",
+              "fieldName": "width"
+            },
+            {
+              "name": "height",
+              "type": {
+                "text": "number"
+              },
+              "default": "30",
+              "fieldName": "height"
+            },
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "fieldName": "label"
+            },
+            {
+              "name": "icon",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "undefined",
+              "fieldName": "icon"
+            },
+            {
+              "name": "icon-anchor",
+              "type": {
+                "text": "\"left\"|\"right\""
+              },
+              "default": "\"left\"",
+              "fieldName": "iconAnchor"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "flow-element",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FlowConditionElement",
+          "members": [
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "String"
+              },
+              "static": true,
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "nbSlots",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "slotConnectorShouldBeVertical",
+              "parameters": [
+                {
+                  "name": "input",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getPositionForSlot",
+              "parameters": [
+                {
+                  "name": "input",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "{ x: number; y: number; }"
+                }
+              },
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "left",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "attribute": "left",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "top",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "attribute": "top",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "number"
+              },
+              "default": "120",
+              "attribute": "width",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "height",
+              "type": {
+                "text": "number"
+              },
+              "default": "30",
+              "attribute": "height",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "attribute": "label",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "undefined",
+              "attribute": "icon",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "iconAnchor",
+              "type": {
+                "text": "\"left\"|\"right\""
+              },
+              "default": "\"left\"",
+              "attribute": "icon-anchor",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseDownOnNode",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseUp",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseDownOnPort",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "slotNumber",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseUpOnPort",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "slotNumber",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "isInputSlot",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "input",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getGlobalPosition",
+              "parameters": [
+                {
+                  "name": "input",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "FlowElement",
+            "module": "src/FlowElements.ts"
+          },
+          "tagName": "flow-condition-element",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "left",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "left",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "top",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "top",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "width",
+              "type": {
+                "text": "number"
+              },
+              "default": "120",
+              "fieldName": "width",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "height",
+              "type": {
+                "text": "number"
+              },
+              "default": "30",
+              "fieldName": "height",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "fieldName": "label",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "icon",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "undefined",
+              "fieldName": "icon",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "icon-anchor",
+              "type": {
+                "text": "\"left\"|\"right\""
+              },
+              "default": "\"left\"",
+              "fieldName": "iconAnchor",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "mouse-down",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "mouse-up",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "port-mouse-down",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "port-mouse-up",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FlowCommentElement",
+          "members": [
+            {
+              "kind": "field",
+              "name": "nbSlots",
+              "readonly": true,
+              "type": {
+                "text": "number"
+              },
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "left",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "attribute": "left",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "top",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "attribute": "top",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "number"
+              },
+              "default": "120",
+              "attribute": "width",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "height",
+              "type": {
+                "text": "number"
+              },
+              "default": "30",
+              "attribute": "height",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "attribute": "label",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "undefined",
+              "attribute": "icon",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "iconAnchor",
+              "type": {
+                "text": "\"left\"|\"right\""
+              },
+              "default": "\"left\"",
+              "attribute": "icon-anchor",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseDownOnNode",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseUp",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseDownOnPort",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "slotNumber",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseUpOnPort",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "slotNumber",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "String"
+              },
+              "static": true,
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "slotConnectorShouldBeVertical",
+              "parameters": [
+                {
+                  "name": "input",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "isInputSlot",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "input",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getPositionForSlot",
+              "parameters": [
+                {
+                  "name": "input",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getGlobalPosition",
+              "parameters": [
+                {
+                  "name": "input",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "FlowElement",
+            "module": "src/FlowElements.ts"
+          },
+          "tagName": "flow-comment-element",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "left",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "left",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "top",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "top",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "width",
+              "type": {
+                "text": "number"
+              },
+              "default": "120",
+              "fieldName": "width",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "height",
+              "type": {
+                "text": "number"
+              },
+              "default": "30",
+              "fieldName": "height",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "fieldName": "label",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "icon",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "undefined",
+              "fieldName": "icon",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "icon-anchor",
+              "type": {
+                "text": "\"left\"|\"right\""
+              },
+              "default": "\"left\"",
+              "fieldName": "iconAnchor",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "mouse-down",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "mouse-up",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "port-mouse-down",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "port-mouse-up",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FlowConnector",
+          "members": [
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "attribute": "color",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "predecessor",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "attribute": "predecessor",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "predecessorSlot",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "attribute": "predecessorSlot",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "successor",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "attribute": "successor",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "successorSlot",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "attribute": "successorSlot",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "color",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "fieldName": "color"
+            },
+            {
+              "name": "predecessor",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "fieldName": "predecessor"
+            },
+            {
+              "name": "predecessorSlot",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "predecessorSlot"
+            },
+            {
+              "name": "successor",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "fieldName": "successor"
+            },
+            {
+              "name": "successorSlot",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "successorSlot"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "flow-connector",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FlowForLoopElement",
+          "members": [
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "String"
+              },
+              "static": true,
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "nbSlots",
+              "readonly": true,
+              "type": {
+                "text": "number"
+              },
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "isInputSlot",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "input",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getPositionForSlot",
+              "parameters": [
+                {
+                  "name": "input",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "{ x: number; y: number; }"
+                }
+              },
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "slotConnectorShouldBeVertical",
+              "parameters": [
+                {
+                  "name": "input",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "left",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "attribute": "left",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "top",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "attribute": "top",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "number"
+              },
+              "default": "120",
+              "attribute": "width",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "height",
+              "type": {
+                "text": "number"
+              },
+              "default": "30",
+              "attribute": "height",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "attribute": "label",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "undefined",
+              "attribute": "icon",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "iconAnchor",
+              "type": {
+                "text": "\"left\"|\"right\""
+              },
+              "default": "\"left\"",
+              "attribute": "icon-anchor",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseDownOnNode",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseUp",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseDownOnPort",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "slotNumber",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_onMouseUpOnPort",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "slotNumber",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getGlobalPosition",
+              "parameters": [
+                {
+                  "name": "input",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "FlowElement",
+            "module": "src/FlowElements.ts"
+          },
+          "tagName": "flow-for-loop-element",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "left",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "left",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "top",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "top",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "width",
+              "type": {
+                "text": "number"
+              },
+              "default": "120",
+              "fieldName": "width",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "height",
+              "type": {
+                "text": "number"
+              },
+              "default": "30",
+              "fieldName": "height",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "fieldName": "label",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "icon",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "undefined",
+              "fieldName": "icon",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "icon-anchor",
+              "type": {
+                "text": "\"left\"|\"right\""
+              },
+              "default": "\"left\"",
+              "fieldName": "iconAnchor",
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "mouse-down",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "mouse-up",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "port-mouse-down",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            },
+            {
+              "name": "port-mouse-up",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "inheritedFrom": {
+                "name": "FlowElement",
+                "module": "src/FlowElements.ts"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FlowElement",
+          "declaration": {
+            "name": "FlowElement",
+            "module": "src/FlowElements.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "flow-element",
+          "declaration": {
+            "name": "FlowElement",
+            "module": "src/FlowElements.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "FlowConditionElement",
+          "declaration": {
+            "name": "FlowConditionElement",
+            "module": "src/FlowElements.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "flow-condition-element",
+          "declaration": {
+            "name": "FlowConditionElement",
+            "module": "src/FlowElements.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "FlowCommentElement",
+          "declaration": {
+            "name": "FlowCommentElement",
+            "module": "src/FlowElements.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "flow-comment-element",
+          "declaration": {
+            "name": "FlowCommentElement",
+            "module": "src/FlowElements.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "FlowConnector",
+          "declaration": {
+            "name": "FlowConnector",
+            "module": "src/FlowElements.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "flow-connector",
+          "declaration": {
+            "name": "FlowConnector",
+            "module": "src/FlowElements.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "FlowForLoopElement",
+          "declaration": {
+            "name": "FlowForLoopElement",
+            "module": "src/FlowElements.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "flow-for-loop-element",
+          "declaration": {
+            "name": "FlowForLoopElement",
+            "module": "src/FlowElements.ts"
           }
         }
       ]
@@ -98,84 +2195,45 @@
             "name": "FlowCanvas",
             "module": "./FlowCanvas.js"
           }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/src/FlowCanvas.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "FlowCanvas",
-          "members": [
-            {
-              "kind": "method",
-              "name": "__increment"
-            },
-            {
-              "kind": "field",
-              "name": "header",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Hey there'"
-            },
-            {
-              "kind": "field",
-              "name": "counter",
-              "type": {
-                "text": "number"
-              },
-              "default": "5"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "flow-canvas",
-          "customElement": true
-        }
-      ],
-      "exports": [
+        },
         {
           "kind": "js",
-          "name": "FlowCanvas",
+          "name": "FlowConnector",
           "declaration": {
-            "name": "FlowCanvas",
-            "module": "dist/src/FlowCanvas.js"
+            "name": "FlowConnector",
+            "module": "./FlowElements.js"
           }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/src/flow-canvas.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "flow-canvas",
-          "declaration": {
-            "name": "FlowCanvas",
-            "module": "/dist/src/FlowCanvas.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/src/index.js",
-      "declarations": [],
-      "exports": [
+        },
         {
           "kind": "js",
-          "name": "FlowCanvas",
+          "name": "FlowElement",
           "declaration": {
-            "name": "FlowCanvas",
-            "module": "./FlowCanvas.js"
+            "name": "FlowElement",
+            "module": "./FlowElements.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "FlowConditionElement",
+          "declaration": {
+            "name": "FlowConditionElement",
+            "module": "./FlowElements.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "FlowForLoopElement",
+          "declaration": {
+            "name": "FlowForLoopElement",
+            "module": "./FlowElements.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "FlowCommentElement",
+          "declaration": {
+            "name": "FlowCommentElement",
+            "module": "./FlowElements.js"
           }
         }
       ]

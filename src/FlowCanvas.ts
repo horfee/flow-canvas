@@ -24,8 +24,8 @@ export class FlowCanvas extends LitElement {
       --primary-font: "Helvetica Neue", Arial, Helvetica, sans-serif;
       font-size: var(--primary-font-size);
       font-family: var(--primary-font);
-      width: fit-content;
-      height: fit-content;
+      // width: fit-content;
+      // height: fit-content;
       box-sizing: border-box;
       border: 1px solid var(--grid-color);
 
@@ -132,12 +132,36 @@ export class FlowCanvas extends LitElement {
     if ( flowElements.length > 0 ) {
       flowElements.forEach( (element) => {
         
+        element.addEventListener("double-click", (e: any) => {
+          this.selectedElement = e.detail.node.id;
+          e.preventDefault();
+          e.stopPropagation();
+          this.dispatchEvent(new CustomEvent("element-double-click", { detail: {
+            id: this.selectedElement
+          }}));
+        });
+
+        // element.addEventListener("click", (e: any) => {
+        //   this.selectedElement = e.detail.node.id;
+        //   e.preventDefault();
+        //   e.stopPropagation();
+        //   this.requestUpdate("selectedElement");
+        //   this.dispatchEvent(new CustomEvent("element-selected", {detail: {
+        //     id: this.selectedElement
+        //   }}));
+        // });
+
         element.addEventListener("mouse-up", (e: any) => {
           if ( this.draggingId === e.detail.node.id ) {
             this.selectedElement = e.detail.node.id;
           }
           e.preventDefault();
           e.stopPropagation();
+
+          this.draggingId = "";
+          this.draggingNode = undefined;
+          this.isDraggingNode = false;
+          this.requestUpdate("draggingId");
           this.requestUpdate("selectedElement");
           
         });
@@ -147,9 +171,14 @@ export class FlowCanvas extends LitElement {
           this.draggingNode = e.detail.node;
           this.eX = e.detail.x;
           this.eY = e.detail.y;
+
           this.draggingId = this.draggingNode!.id;
           this.selectedElement = this.draggingId;
           this.requestUpdate("draggingId");
+          this.requestUpdate("selectedElement");
+          this.dispatchEvent(new CustomEvent("element-selected", {detail: {
+            id: this.selectedElement
+          }}));
           
         });
         
@@ -241,6 +270,12 @@ export class FlowCanvas extends LitElement {
       this.isCreatingConnector = false;
       this.creatingConnectorSource = undefined;
       this.requestUpdate("isCreatingConnector");
+    } else {
+      this.selectedElement = "";
+      this.requestUpdate("selectedElement");
+      this.dispatchEvent(new CustomEvent("element-selected", {detail: {
+        id: this.selectedElement
+      }}));
     }
   }
 
@@ -363,6 +398,11 @@ export class FlowCanvas extends LitElement {
 
   render() {
     return html`
+      <style>
+        ::slotted(*)[id="${this.selectedElement}"] {
+          stroke: 2px solid var(--highlighted-color);
+        }
+      </style>
       <div style="position: relative; width: ${this.width}px; height: ${this.height}px;">
         <div style="position: absolute; pointer-events:none; width: 100%; height: 100%;">
           <div class="toolbar" style="pointer-events: all;">
@@ -373,7 +413,7 @@ export class FlowCanvas extends LitElement {
             <input type="range" min="1" max="20" .value="${this.scale * 10}" class="slider" id="myRange" @change=${ (e: Event) => this.scale = (e.target as any).value / 10.0}>
           </div>
         </div>
-        <svg tabIndex="0" width="${this.width}" height="${this.height}" style="cursor: crosshair; touch-action: none;" @keyup=${this._onKeyPress} @mousemove=${this._onMouseMove} @mouseup=${this._onMouseUp} @click=${this._selectElement} >
+        <svg tabIndex="0" width="${this.width}" height="${this.height}" style="cursor: crosshair; touch-action: none;" @keyup=${this._onKeyPress} @mousemove=${this._onMouseMove} @mouseup=${this._onMouseUp} @cslick=${this._selectElement} >
           <defs>
             <marker
               id="arrow"

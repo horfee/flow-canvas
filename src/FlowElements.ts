@@ -7,6 +7,7 @@ import { range } from 'lit/directives/range.js';
 @customElement("flow-element")
 export class FlowElement extends LitElement {
 
+
   @property({type: Number, reflect: true})
   left = 0;
 
@@ -56,6 +57,8 @@ export class FlowElement extends LitElement {
   }
 
   protected _onMouseDownOnNode(e: MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
     this.dispatchEvent(new CustomEvent("mouse-down", { bubbles: true, detail: {
       x: e.clientX,
       y: e.clientY,
@@ -65,12 +68,34 @@ export class FlowElement extends LitElement {
   }
 
   protected _onMouseUp(e: MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
     this.dispatchEvent(new CustomEvent("mouse-up", { bubbles: true, detail: {
       x: e.clientX,
       y: e.clientY,
       node: this
     }}));
 
+  }
+
+  protected _onDoubleClick(e: MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.dispatchEvent(new CustomEvent("double-click", {bubbles: true, detail: {
+      x: e.clientX,
+      y: e.clientY,
+      node: this
+    }}));
+  }
+
+  protected _onClick(e: MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.dispatchEvent(new CustomEvent("click", {bubbles: true, detail: {
+      x: e.clientX,
+      y: e.clientY,
+      node: this
+    }}));
   }
 
   protected _onMouseDownOnPort(slotNumber: number, e: MouseEvent) {
@@ -113,7 +138,7 @@ export class FlowElement extends LitElement {
     const mustAlignIconLeft = this.iconAnchor === "left";
     const lines = (this.label||"").split("\n");
     return svg`
-    <g class="node" id="${this.id}" transform="translate(${this.left || 0},${this.top || 0})" @mousedown=${this._onMouseDownOnNode.bind(this)} @mouseup=${this._onMouseUp.bind(this)} >
+    <g class="node" id="${this.id}" transform="translate(${this.left || 0},${this.top || 0})" @dblclick="${this._onDoubleClick.bind(this)}" @click="${this._onClick.bind(this)}" @mousedown=${this._onMouseDownOnNode.bind(this)} @mouseup=${this._onMouseUp.bind(this)} >
       <rect class="node-rect " rx="5" ry="5" fill="${(this.constructor as any).color}" width="${this.width}" height="${this.height}"></rect>
       <g class="node-icon" x="0" y="0" c="${mustAlignIconLeft}" transform="translate(${mustAlignIconLeft ? 0 : this.width - 30},0)" style="pointer-events: none;">
         <image xlink:href="${this.icon}" class="node-icon" x="0" width="30" height="${this.height}" y="0" style=""></image>
@@ -202,7 +227,7 @@ export class FlowConditionElement extends FlowElement {
     const mustAlignIconLeft = this.iconAnchor === "left";
     const lines = (this.label||"").split("\n");
     return svg`
-    <g class="node" id="${this.id}" transform="translate(${this.left || 0},${this.top || 0})" @mousedown=${this._onMouseDownOnNode.bind(this)} @mouseup=${this._onMouseUp.bind(this)} >
+    <g class="node" id="${this.id}" transform="translate(${this.left || 0},${this.top || 0})"  @dblclick="${this._onDoubleClick.bind(this)}" @click="${this._onClick.bind(this)}" @mousedown=${this._onMouseDownOnNode.bind(this)} @mouseup=${this._onMouseUp.bind(this)} >
       <polygon class="node-rect " fill="${FlowConditionElement.color}" points="0, ${this.height / 2} ${this.width / 2}, 0 ${this.width}, ${this.height / 2} ${this.width / 2}, ${this.height}" />
       <g class="node-icon" x="0" y="0" transform="translate(${(this.width - 30) / 2},${(this.height - 30) / 2})" style="pointer-events: none;">
         <image xlink:href="${this.icon}" class="node-icon" x="0" width="30" height="30" y="0" style=""></image>
