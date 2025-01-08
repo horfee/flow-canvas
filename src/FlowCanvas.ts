@@ -96,13 +96,15 @@ export class FlowCanvas extends LitElement {
 
   @property({ type: Boolean, reflect: true}) showGrid = true;
 
+  @property({ type: Boolean, reflect: true}) deleteAllowed = false;
+
   connectedCallback(): void {
     super.connectedCallback();
   }
 
   private _onKeyPress(ev: Event) {
     const e = ev as KeyboardEvent;
-    if ( e.key === "Delete" || e.key === "Backspace" ) {
+    if ( this.deleteAllowed && (e.key === "Delete" || e.key === "Backspace") ) {
       if (this.selectedElement !== undefined ) {
         const n = this.querySelector("#" + this.selectedElement);
         n!.remove();
@@ -164,6 +166,11 @@ export class FlowCanvas extends LitElement {
           this.requestUpdate("draggingId");
           this.requestUpdate("selectedElement");
           
+          this.dispatchEvent(new CustomEvent("value-changed", { detail: {
+            id: this.selectedElement,
+            left: e.detail.node.left,
+            top: e.detail.node.top
+          }}));
         });
 
         element.addEventListener("mouse-down", (e: any) => {
@@ -256,8 +263,8 @@ export class FlowCanvas extends LitElement {
   private creatingConnectorSourceSlot : number = 0;
   private creatingConnectorEndPoint: {x: number, y: number} = {x:0,y:0};
   
-  @state()
-  private selectedElement: string | undefined;
+  @property({type: String, reflect: false})
+  public selectedElement: string | undefined;
 
   private _onMouseUp(e: Event) {
     if ( this.isDraggingNode ) {
