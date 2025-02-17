@@ -37,11 +37,13 @@ export class FlowElement extends LitElement {
   iconAnchor: "left"|"right" = "left";
 
   protected updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+    super.updated(_changedProperties);
     const minHeight = 30;
     if ( _changedProperties.has("nbSlots") && _changedProperties.get("nbSlots") !== this.nbSlots ) {
       const lines = (this.label||"").split("\n");
       const maxLengthLine = Math.max(...lines.map( (l) => l.length));
       this.height = Math.max(minHeight, lines.length * 24, this.nbSlots * 10 + (2*5));
+      this.dispatchEvent(new CustomEvent("render-requested", { detail: this, composed: true, bubbles: true}));
     } 
     if ( _changedProperties.has("label") && _changedProperties.get("label") !== this.label ) {
       const minWidth = 100;
@@ -53,6 +55,7 @@ export class FlowElement extends LitElement {
       const maxLengthLine = Math.max(...lines.map( (l) => l.length));
       this.width = Math.max(minWidth, maxLengthLine * sizePerCharacter + iconWidth + iconMargin * 2 + slotSize);
       this.height = Math.max(minHeight, lines.length * 24, this.nbSlots * 10 + (2*5));
+      this.dispatchEvent(new CustomEvent("render-requested", { detail: this, composed: true, bubbles: true}));
     }
   }
 

@@ -458,7 +458,7 @@ export class FlowCanvas extends LitElement {
           </g>
         </svg>
       </div>
-      <div hidden>
+      <div hidden @render-requested="${() => this.requestUpdate()}">
         <slot @slotchange=${this._handleSlotChange} >
         </slot>
       </div>
