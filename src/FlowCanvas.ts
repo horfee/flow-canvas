@@ -224,6 +224,8 @@ export class FlowCanvas extends LitElement {
           this.getNode(cnx.predecessor)?.dispatchEvent(new CustomEvent("connector-created", {detail: cnx}));
           this.getNode(cnx.successor)?.dispatchEvent(new CustomEvent("connector-created", {detail: cnx}));
           //this.creatingConnectorSourceSlot = e.detail.slot;
+          this.dispatchEvent(new CustomEvent("connector-created", {detail:cnx, bubbles: true, composed: true}));
+          
           console.log("Start creating output connector for slot 0");
         });
        

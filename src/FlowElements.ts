@@ -144,7 +144,9 @@ export class FlowElement extends LitElement {
     <g class="node" id="${this.id}" transform="translate(${this.left || 0},${this.top || 0})" @dblclick="${this._onDoubleClick.bind(this)}" @click="${this._onClick.bind(this)}" @mousedown=${this._onMouseDownOnNode.bind(this)} @mouseup=${this._onMouseUp.bind(this)} >
       <rect class="node-rect " rx="5" ry="5" fill="${(this.constructor as any).color}" width="${this.width}" height="${this.height}"></rect>
       <g class="node-icon" x="0" y="0" c="${mustAlignIconLeft}" transform="translate(${mustAlignIconLeft ? 0 : this.width - 30},0)" style="pointer-events: none;">
-        <image xlink:href="${this.icon}" class="node-icon" x="0" width="30" height="${this.height}" y="0" style=""></image>
+        <g transform="scale(0.8) translate(3 3)"> 
+          <image href="${this.icon}" class="node-icon" x="0" width="30" height="${this.height}" y="0" style=""></image>
+        </g>
         <path d="M ${mustAlignIconLeft ? 29.5 : 0.5 } 1 l 0 ${this.height - 2}" class="node-icon-shade-border"></path>
       </g>
       <g class="node-label" transform="translate(${ mustAlignIconLeft ? 38 : 8 },${(this.height - (lines.length * 24)) / 2 + 15})">
