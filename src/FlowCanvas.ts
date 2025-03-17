@@ -400,7 +400,7 @@ export class FlowCanvas extends LitElement {
             <input type="range" min="1" max="20" .value="${this.scale * 10}" class="slider" id="myRange" @change=${ (e: Event) => this.scale = (e.target as any).value / 10.0}>
           </div>
         </div>
-        <svg tabIndex="0" width="${this.width}" height="${this.height}" style="cursor: crosshair; touch-action: none;" @keyup=${this._onKeyPress} @mousemove=${this._onMouseMove} @mouseup=${this._onMouseUp} @cslick=${this._selectElement} >
+        <svg tabIndex="0" width="${this.width}" height="${this.height}" style="cursor: crosshair; touch-action: none;"  @mousemove=${this._onMouseMove} @mouseup=${this._onMouseUp} @cslick=${this._selectElement} >
           <defs>
             <marker
               id="arrow"
