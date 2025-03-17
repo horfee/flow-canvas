@@ -391,9 +391,9 @@ export class FlowCanvas extends LitElement {
           stroke: 2px solid var(--highlighted-color);
         }
       </style>
-      <div style="position: relative; width: ${this.width}px; height: ${this.height}px;">
-        <div style="position: absolute; pointer-events:none; width: 100%; height: 100%;">
-          <div class="toolbar" style="pointer-events: all;">
+      <div style="height: 100%; position: relative;">
+        <div style="position: absolute; pointer-events:none;overflow: scroll; ">
+          <div class="toolbar" style="position: sticky; pointer-events: all;">
             <button @click=${() => this.scale = Math.max(this.scale - 0.1, 0.1)}>-</button>
             <button @click=${() => this.scale = 1}> =</button>
             <button @click=${() => this.scale = Math.min(this.scale + 0.1, 2)}>+</button>
