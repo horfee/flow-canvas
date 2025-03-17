@@ -96,21 +96,6 @@ export class FlowCanvas extends LitElement {
 
   @property({ type: Boolean, reflect: true}) deleteAllowed = false;
 
-  connectedCallback(): void {
-    super.connectedCallback();
-  }
-
-  private _onKeyPress(ev: Event) {
-    const e = ev as KeyboardEvent;
-    if ( this.deleteAllowed && (e.key === "Delete" || e.key === "Backspace") ) {
-      if (this.selectedElement !== undefined ) {
-        const n = this.querySelector("#" + this.selectedElement);
-        n!.remove();
-        return;
-      }
-    }
-    
-  }
 
   @state()
   private nodes: Array<FlowElement> = [];
