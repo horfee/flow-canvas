@@ -29,11 +29,23 @@ export class FlowCanvas extends LitElement {
 
     }
 
+    :host(:not([disabled])) svg rect.overlay {
+      display: none;
+    }
+
+    svg rect.overlay {
+      opacity: 0.4;
+      fill: gray;
+    } 
+    
     :host(:not([showgrid])) g.grid {
       display: none;
     }
 
-
+    :host([disabled]) {
+      pointer-events: none;
+    }
+    
     svg {
       line-height: 20px;
       outline: none;
@@ -94,6 +106,8 @@ export class FlowCanvas extends LitElement {
 
   @property({ type: Boolean, reflect: true}) showGrid = true;
 
+  @property({ type: Boolean, reflect: true}) disabled = false;
+  
   @property({ type: Boolean, reflect: true}) deleteAllowed = false;
 
 
@@ -420,6 +434,7 @@ export class FlowCanvas extends LitElement {
               <g>
                 ${ this.isCreatingConnector ? this.renderConnector("tmp", "red", this.creatingConnectorSource!.getGlobalPosition(this.creatingConnectorSourceSlot), this.creatingConnectorSource?.slotConnectorShouldBeVertical(this.creatingConnectorSourceSlot) || false, this.creatingConnectorEndPoint, true ): ''}
               </g>
+              <rect class="overlay" width="${this.width}" height="${this.height}"/>
             </g>
           </g>
         </svg>
