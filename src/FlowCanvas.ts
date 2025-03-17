@@ -24,8 +24,6 @@ export class FlowCanvas extends LitElement {
       --primary-font: "Helvetica Neue", Arial, Helvetica, sans-serif;
       font-size: var(--primary-font-size);
       font-family: var(--primary-font);
-      // width: fit-content;
-      // height: fit-content;
       box-sizing: border-box;
       border: 1px solid var(--grid-color);
 
@@ -143,16 +141,6 @@ export class FlowCanvas extends LitElement {
           }}));
         });
 
-        // element.addEventListener("click", (e: any) => {
-        //   this.selectedElement = e.detail.node.id;
-        //   e.preventDefault();
-        //   e.stopPropagation();
-        //   this.requestUpdate("selectedElement");
-        //   this.dispatchEvent(new CustomEvent("element-selected", {detail: {
-        //     id: this.selectedElement
-        //   }}));
-        // });
-
         element.addEventListener("mouse-up", (e: any) => {
           if ( this.draggingId === e.detail.node.id ) {
             this.selectedElement = e.detail.node.id;
@@ -225,7 +213,7 @@ export class FlowCanvas extends LitElement {
           this.getNode(cnx.successor)?.dispatchEvent(new CustomEvent("connector-created", {detail: cnx}));
           //this.creatingConnectorSourceSlot = e.detail.slot;
           this.dispatchEvent(new CustomEvent("connector-created", {detail:cnx, bubbles: true, composed: true}));
-          
+
           console.log("Start creating output connector for slot 0");
         });
        
@@ -342,8 +330,6 @@ export class FlowCanvas extends LitElement {
       elt = this.flowElements.filter( (element) => element.left <= event.offsetX && element.left + element.width >= event.offsetX && element.top <= event.offsetY && element.top + element.height >= event.offsetY)[0];
     }
 
-    // elt = document.elementsFromPoint(event.offsetX, event.offsetY);
-    // while (elt.id === "" && elt instanceof SVGGElement ) elt = elt.parentNode;
     this.selectedElement = elt?.id || null;
     this.requestUpdate("selectedElement");
     event.preventDefault();
@@ -353,13 +339,6 @@ export class FlowCanvas extends LitElement {
   private _computeworkingBoundaries() {
     const elements = this.flowElements;
     const dimensions = {left: Number.MAX_VALUE, top: Number.MAX_VALUE, right: 0, bottom: 0};
-    // const final = {left: Number.MAX_VALUE, top: Number.MAX_VALUE, right: 0, bottom: 0};
-    // for(const elt of elements) {
-    //   final.left = Math.min(final.left, elt.left);
-    //   final.top = Math.min(final.top, elt.top);
-    //   final.right = Math.max(final.right, elt.left + elt.width);
-    //   final.bottom = Math.max(final.bottom, elt.top + elt.height);
-    // }
     
     const final = elements.reduce( (accumulator, current) => ({ 
       left: Math.min(accumulator.left, current.left), 
