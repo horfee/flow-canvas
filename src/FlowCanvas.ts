@@ -132,17 +132,17 @@ export class FlowCanvas extends LitElement {
       flowElements.forEach( (element) => {
         
         element.addEventListener("double-click", (e: any) => {
-          this.selectedElement = e.detail.node.id;
+          this.selectedelement = e.detail.node.id;
           e.preventDefault();
           e.stopPropagation();
           this.dispatchEvent(new CustomEvent("element-double-click", { detail: {
-            id: this.selectedElement
+            id: this.selectedelement
           }}));
         });
 
         element.addEventListener("mouse-up", (e: any) => {
           if ( this.draggingId === e.detail.node.id ) {
-            this.selectedElement = e.detail.node.id;
+            this.selectedelement = e.detail.node.id;
           }
           e.preventDefault();
           e.stopPropagation();
@@ -151,10 +151,10 @@ export class FlowCanvas extends LitElement {
           this.draggingNode = undefined;
           this.isDraggingNode = false;
           this.requestUpdate("draggingId");
-          this.requestUpdate("selectedElement");
+          this.requestUpdate("selectedelement");
           
           this.dispatchEvent(new CustomEvent("value-changed", { detail: {
-            id: this.selectedElement,
+            id: this.selectedelement,
             left: e.detail.node.left,
             top: e.detail.node.top
           }}));
@@ -167,11 +167,11 @@ export class FlowCanvas extends LitElement {
           this.eY = e.detail.y;
 
           this.draggingId = this.draggingNode!.id;
-          this.selectedElement = this.draggingId;
+          this.selectedelement = this.draggingId;
           this.requestUpdate("draggingId");
-          this.requestUpdate("selectedElement");
+          this.requestUpdate("selectedelement");
           this.dispatchEvent(new CustomEvent("element-selected", {detail: {
-            id: this.selectedElement
+            id: this.selectedelement
           }}));
           
         });
@@ -252,8 +252,8 @@ export class FlowCanvas extends LitElement {
   private creatingConnectorSourceSlot : number = 0;
   private creatingConnectorEndPoint: {x: number, y: number} = {x:0,y:0};
   
-  @property({type: String, reflect: false})
-  public selectedElement: string | undefined;
+  @property({type: String, reflect: true, attribute: "selected-element"})
+  public selectedelement?: string;
 
   private _onMouseUp(e: Event) {
     if ( this.isDraggingNode ) {
@@ -267,10 +267,10 @@ export class FlowCanvas extends LitElement {
       this.creatingConnectorSource = undefined;
       this.requestUpdate("isCreatingConnector");
     } else {
-      this.selectedElement = "";
-      this.requestUpdate("selectedElement");
+      this.selectedelement = "";
+      this.requestUpdate("selectedelement");
       this.dispatchEvent(new CustomEvent("element-selected", {detail: {
-        id: this.selectedElement
+        id: this.selectedelement
       }}));
     }
   }
@@ -329,8 +329,8 @@ export class FlowCanvas extends LitElement {
       elt = this.flowElements.filter( (element) => element.left <= event.offsetX && element.left + element.width >= event.offsetX && element.top <= event.offsetY && element.top + element.height >= event.offsetY)[0];
     }
 
-    this.selectedElement = elt?.id || null;
-    this.requestUpdate("selectedElement");
+    this.selectedelement = elt?.id || null;
+    this.requestUpdate("selectedelement");
     event.preventDefault();
   }
 
@@ -374,7 +374,7 @@ export class FlowCanvas extends LitElement {
 
     return svg`
       <path id="${connectorId}" 
-            stroke="${this.selectedElement === connectorId ? "var(--highlighted-color)" : color || "black"}" 
+            stroke="${this.selectedelement === connectorId ? "var(--highlighted-color)" : color || "black"}" 
             stroke-width="3" 
             fill="transparent"
             @click=${this._selectElement} 
@@ -386,7 +386,7 @@ export class FlowCanvas extends LitElement {
   render() {
     return html`
       <style>
-        ::slotted(*)[id="${this.selectedElement}"] {
+        ::slotted(*)[id="${this.selectedelement}"] {
           stroke: 2px solid var(--highlighted-color);
         }
       </style>
@@ -425,11 +425,11 @@ export class FlowCanvas extends LitElement {
                 ${this.connectors.map( (connector) => this.renderConnector(connector.id, connector.color, this.resolveOutputPosition(connector), this.resolveConnectorStartShouldBeVertical(connector),  this.resolveInputPosition(connector), this.resolveConnectorEndShouldBeVertical(connector)))}
               </g>
               <g>
-                ${this.nodes.filter(n => n.id !== this.draggingId && n.id !== this.selectedElement).map( (node) => node.render())}
+                ${this.nodes.filter(n => n.id !== this.draggingId && n.id !== this.selectedelement).map( (node) => node.render())}
                 ${this.draggingNode !== undefined ? this.draggingNode.render() : ''}
               </g>
               <g class="selected">
-                ${this.selectedElement && this.nodes.findIndex((node) => node.id === this.selectedElement) >= 0 ? this.nodes.find((node) => node.id === this.selectedElement)!.render() : ""};
+                ${this.selectedelement && this.nodes.findIndex((node) => node.id === this.selectedelement) >= 0 ? this.nodes.find((node) => node.id === this.selectedelement)!.render() : ""};
               </g>
               <g>
                 ${ this.isCreatingConnector ? this.renderConnector("tmp", "red", this.creatingConnectorSource!.getGlobalPosition(this.creatingConnectorSourceSlot), this.creatingConnectorSource?.slotConnectorShouldBeVertical(this.creatingConnectorSourceSlot) || false, this.creatingConnectorEndPoint, true ): ''}
