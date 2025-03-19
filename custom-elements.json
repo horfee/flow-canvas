@@ -195,7 +195,7 @@
             },
             {
               "kind": "field",
-              "name": "selectedElement",
+              "name": "selectedelement",
               "type": {
                 "text": "string | undefined"
               },
