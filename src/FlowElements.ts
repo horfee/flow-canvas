@@ -11,6 +11,9 @@ export class FlowElement extends LitElement {
   @property({type: Number, reflect: true})
   left = 0;
 
+  @property({type: Boolean, reflect: true})
+  entrypoint = false;
+
   @property({type: Number, reflect: true})
   top = 0;
 

@@ -122,6 +122,7 @@ export class FlowCanvas extends LitElement {
 
   private _handleSlotChange(e: Event) {
     let childNodes = [...(e.target! as any).assignedNodes({flatten: true})];
+    childNodes = childNodes.concat(...this.childNodes);
     const flowElements = childNodes.filter( (node) => node instanceof FlowElement && this.nodes.findIndex((v) => v.id == node.id) == -1) as Array<FlowElement>;
     const filteredNodes = this.nodes.filter( (node) => childNodes.find( (n1) => n1 instanceof FlowElement && node.id === n1.id) !== undefined);
     if ( filteredNodes.length != this.nodes.length ) {
@@ -429,7 +430,7 @@ export class FlowCanvas extends LitElement {
                 ${this.draggingNode !== undefined ? this.draggingNode.render() : ''}
               </g>
               <g class="selected">
-                ${this.selectedelement && this.nodes.findIndex((node) => node.id === this.selectedelement) >= 0 ? this.nodes.find((node) => node.id === this.selectedelement)!.render() : ""};
+                ${this.selectedelement && this.nodes.findIndex((node) => node.id === this.selectedelement) >= 0 ? this.nodes.find((node) => node.id === this.selectedelement)!.render() : ""}
               </g>
               <g>
                 ${ this.isCreatingConnector ? this.renderConnector("tmp", "red", this.creatingConnectorSource!.getGlobalPosition(this.creatingConnectorSourceSlot), this.creatingConnectorSource?.slotConnectorShouldBeVertical(this.creatingConnectorSourceSlot) || false, this.creatingConnectorEndPoint, true ): ''}
