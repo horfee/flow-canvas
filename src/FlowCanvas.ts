@@ -379,7 +379,7 @@ export class FlowCanvas extends LitElement {
             stroke-width="3" 
             fill="transparent"
             @click=${this._selectElement} 
-            d="M ${start.x} ${start.y} C ${startIsVertical ? start.x + " " + (start.y + 50): (start.x + 50) + "  " + start.y}, ${end.x - 60} ${end.y} ${end.x-10} ${end.y} "
+            d="M ${start.x} ${start.y} C ${startIsVertical ? start.x + " " + (start.y + 50): (start.x + 50) + "  " + start.y}, ${endIsVertical ? (end.x) + " " + (end.y - 60) + " " + (end.x) + " " + (end.y - 10) : (end.x - 60) + " " + (end.y) + " " + (end.x-10) + " " + end.y} "
             marker-end="url(#arrow)" ></path>
     `;
   }

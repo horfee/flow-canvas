@@ -20,12 +20,16 @@
     render(
       html`
         <flow-canvas width="8000" height="8000" scale="1" style="width: 800px; height: 600px; overflow: scroll;">
-          <flow-comment-element id="comment" left="200" color="blue" top="200" icon="http://localhost:1880/icons/node-red/comment.svg" label="It should be a comment\nHello on the second line"></flow-comment-element>
-          <flow-comment-element id="comment-1" left="200" top="600" icon-anchor="right" icon="http://localhost:1880/icons/node-red/comment.svg" label="abcdefghijklmnopqrstuvwxyz !?#@0987654321"></flow-comment-element>
-          <flow-for-loop-element id="forloop" left="200" top="900" icon-anchor="right" icon="http://localhost:1880/icons/node-red/comment.svg" label="For loop"></flow-for-loop-element>
+          <flow-comment-element id="comment" left="200" color="blue" top="050" icon="icons/node-red/comment.svg" label="It should be a comment\nHello on the second line"></flow-comment-element>
+          <flow-comment-element id="comment-1" left="200" top="600" icon-anchor="right" icon="icons/node-red/comment.svg" label="abcdefghijklmnopqrstuvwxyz !?#@0987654321"></flow-comment-element>
+          <flow-for-loop-element id="forloop" left="200" top="900" icon-anchor="right" icon="icons/node-red/comment.svg" label="For loop"></flow-for-loop-element>
           <flow-condition-element id="my-first-condition" left="150" top="500" icon="" label="is it really\nreally true ?"></flow-condition-element>
           <flow-element id="my-first-step" left="50" top="100" icon="" label="Element 1 with a long label"></flow-element>
-          <flow-element id="my-second-step" left="450" top="400" icon="" nbslots="6" label="Element 2" ></flow-element>
+          <flow-element id="action1" icon-anchor="none" vertical left="300" top="200" icon="" nbslots="6" label="Action 1" ></flow-element>
+          <flow-element id="action2" icon-anchor="none" left="500" top="200" icon="" nbslots="6" label="Action 2" ></flow-element>
+          <flow-element id="action3" icon-anchor="none" left="400" top="450" icon="" nbslots="6" label="Action 3" ></flow-element>
+          <flow-connector id="cnt1" predecessor="action1" predecessorslot="1" successor="action3" successorslot="0" color="darkgray"></flow-connector>
+          <flow-connector id="cnt2" predecessor="action2" predecessorslot="1" successor="action3" successorslot="0" color="darkgray"></flow-connector>
           <!--
             <flow-connector id="my-first-connector" predecessor="my-first-step" predecessorslot="1" successor="my-second-step" successorslot="0" color="black"></flow-connector>
           -->
