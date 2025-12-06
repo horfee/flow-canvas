@@ -392,7 +392,7 @@ export class FlowCanvas extends LitElement {
         }
       </style>
       <div style="height: 100%; position: relative;">
-        <div style="position: absolute; pointer-events:none;overflow: scroll; ">
+        <div style="position: absolute; pointer-events:none; ">
           <div class="toolbar" style="position: sticky; pointer-events: all;">
             <button @click=${() => this.scale = Math.max(this.scale - 0.1, 0.1)}>-</button>
             <button @click=${() => this.scale = 1}> =</button>
